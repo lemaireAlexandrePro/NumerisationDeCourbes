@@ -1,7 +1,7 @@
 //==============================================================================
 // Name        : ParametresAffichage.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the ParametresAffichage class
 //==============================================================================
 
@@ -28,10 +28,10 @@ const ParametresPoint ParametresAffichage::parametresPointsManuelsDefaut = Param
         ParametresPoint::couleurPointManuelDefaut);
 
 const QMap<int, char> ParametresAffichage::formatsNotationNombresCaractere = QMap<int, char>(
-        std::map<int, char> { {STANDARD, 'f'}, {SCIENTIFIQUE, 'e'}});
+        std::map<int, char> { { STANDARD, 'f' }, { SCIENTIFIQUE, 'e' } });
 const QMap<int, QString> ParametresAffichage::formatsNotationNombresTexte = QMap<int, QString>(
-        std::map<int, QString> { {STANDARD, QString::fromUtf8("Standard")}, {SCIENTIFIQUE,
-                QString::fromUtf8("Scientifique")}});
+        std::map<int, QString> { { STANDARD, QString::fromUtf8("Standard") }, { SCIENTIFIQUE,
+                QString::fromUtf8("Scientifique") } });
 
 ParametresAffichage::ParametresAffichage() :
         formatNotationNombres(formatNotationNombresDefaut),
@@ -59,6 +59,22 @@ ParametresAffichage::ParametresAffichage(const ParametresAffichage& parametresAf
 
 ParametresAffichage::~ParametresAffichage()
 {
+}
+
+ParametresAffichage& ParametresAffichage::operator=(const ParametresAffichage& parametresAffichage)
+{
+    this->copy(parametresAffichage);
+    return *this;
+}
+
+bool ParametresAffichage::operator==(const ParametresAffichage& parametresAffichage) const
+{
+    return this->equals(parametresAffichage);
+}
+
+bool ParametresAffichage::operator!=(const ParametresAffichage& parametresAffichage) const
+{
+    return !this->equals(parametresAffichage);
 }
 
 const int& ParametresAffichage::getFormatNotationNombres() const
@@ -185,7 +201,7 @@ bool ParametresAffichage::equals(const ParametresAffichage& parametresAffichage)
     return true;
 }
 
-void ParametresAffichage::fromString(const QString& fromString, const char& sep)
+void ParametresAffichage::fromString(const QString& fromString, const QChar& sep)
 {
     const QStringList fromStringList = listeSousElements(fromString, sep);
     ParametresTrait parametresAxes = this->getParametresAxes();
@@ -207,16 +223,16 @@ void ParametresAffichage::fromString(const QString& fromString, const char& sep)
     this->setParametresPointsManuels(parametresPointsManuels);
 }
 
-const QString ParametresAffichage::toString(const char& sep) const
+const QString ParametresAffichage::toString(const QChar& sep) const
 {
     QString toString;
     toString += QString::number(this->getFormatNotationNombres()) + sep;
     toString += QString::number(this->getNombreChiffresSignificatifs()) + sep;
-    toString += "(" + this->getParametresAxes().toString(sep) + ")" + sep;
-    toString += "(" + this->getParametresCourbes().toString(sep) + ")" + sep;
-    toString += "(" + this->getParametresPointsAxes().toString(sep) + ")" + sep;
-    toString += "(" + this->getParametresPointsCourbes().toString(sep) + ")" + sep;
-    toString += "(" + this->getParametresPointsManuels().toString(sep) + ")";
+    toString += QString("(%1)").arg(this->getParametresAxes().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getParametresCourbes().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getParametresPointsAxes().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getParametresPointsCourbes().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getParametresPointsManuels().toString(sep));
     return toString;
 }
 

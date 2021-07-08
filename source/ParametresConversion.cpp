@@ -1,12 +1,13 @@
 //==============================================================================
 // Name        : ParametresConversion.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the ParametresConversion class
 //==============================================================================
 
 #include "ParametresConversion.h"
 #include "Outils.h"
+#include <cmath>
 #include <QStringList>
 
 const int ParametresConversion::methodeConversionDefaut = BRUTE;
@@ -15,10 +16,12 @@ const int ParametresConversion::nombreNiveauxDeGrisDefaut = 5;
 const int ParametresConversion::nombreTeintesSatureesDefaut = 6;
 const int ParametresConversion::seuilSaturationDefaut = 32;
 
-const QMap<int, QString> ParametresConversion::methodesConversionTexte = QMap<int, QString>(
-        std::map<int, QString> { {BRUTE, QString::fromUtf8("Brute")}, {NOIR_ET_BLANC,
-                QString::fromUtf8("Noir et blanc")}, {NIVEAUX_DE_GRIS, QString::fromUtf8(
-                "Niveaux de gris")}, {TEINTES_SATUREES, QString::fromUtf8("Teintes saturées")}});
+const QMap<int, QString> ParametresConversion::methodesConversionTexte =
+        QMap<int, QString>(
+                std::map<int, QString> { { BRUTE, QString::fromUtf8("Brute") }, { NOIR_ET_BLANC,
+                        QString::fromUtf8("Noir et blanc") }, { NIVEAUX_DE_GRIS, QString::fromUtf8(
+                        "Niveaux de gris") }, { TEINTES_SATUREES, QString::fromUtf8(
+                        "Teintes saturées") } });
 
 ParametresConversion::ParametresConversion() :
         methodeConversion(methodeConversionDefaut), seuilNoirEtBlanc(seuilNoirEtBlancDefaut),
@@ -46,6 +49,23 @@ ParametresConversion::ParametresConversion(const ParametresConversion& parametre
 
 ParametresConversion::~ParametresConversion()
 {
+}
+
+ParametresConversion& ParametresConversion::operator=(
+        const ParametresConversion& parametresConversion)
+{
+    this->copy(parametresConversion);
+    return *this;
+}
+
+bool ParametresConversion::operator==(const ParametresConversion& parametresConversion) const
+{
+    return this->equals(parametresConversion);
+}
+
+bool ParametresConversion::operator!=(const ParametresConversion& parametresConversion) const
+{
+    return !this->equals(parametresConversion);
 }
 
 const int& ParametresConversion::getMethodeConversion() const
@@ -139,7 +159,7 @@ bool ParametresConversion::equals(const ParametresConversion& parametresConversi
     return true;
 }
 
-void ParametresConversion::fromString(const QString& fromString, const char& sep)
+void ParametresConversion::fromString(const QString& fromString, const QChar& sep)
 {
     const QStringList fromStringList = listeSousElements(fromString, sep);
     this->setMethodeConversion(fromStringList.at(0).toInt());
@@ -149,7 +169,7 @@ void ParametresConversion::fromString(const QString& fromString, const char& sep
     this->setSeuilSaturation(fromStringList.at(4).toInt());
 }
 
-const QString ParametresConversion::toString(const char& sep) const
+const QString ParametresConversion::toString(const QChar& sep) const
 {
     QString toString;
     toString += QString::number(this->getMethodeConversion()) + sep;
@@ -167,12 +187,12 @@ const QString ParametresConversion::getMethodeConversionTexte() const
 
 double ParametresConversion::getSeuilNoirEtBlancFacteur() const
 {
-    return ((double) this->getSeuilNoirEtBlanc() / 255.0);
+    return (this->getSeuilNoirEtBlanc() / 255.0);
 }
 
 double ParametresConversion::getSeuilSaturationFacteur() const
 {
-    return ((double) this->getSeuilSaturation() / 255.0);
+    return (this->getSeuilSaturation() / 255.0);
 }
 
 void ParametresConversion::setMethodeConversionTexte(const QString& methodeConversionTexte)
@@ -182,10 +202,10 @@ void ParametresConversion::setMethodeConversionTexte(const QString& methodeConve
 
 void ParametresConversion::setSeuilNoirEtBlancFacteur(const double& seuilNoirEtBlancFacteur)
 {
-    this->setSeuilNoirEtBlanc((int) round(seuilNoirEtBlancFacteur * 255.0));
+    this->setSeuilNoirEtBlanc(static_cast<int>(round(seuilNoirEtBlancFacteur * 255.0)));
 }
 
 void ParametresConversion::setSeuilSaturationFacteur(const double& seuilSaturationFacteur)
 {
-    this->setSeuilSaturation((int) round(seuilSaturationFacteur * 255.0));
+    this->setSeuilSaturation(static_cast<int>(round(seuilSaturationFacteur * 255.0)));
 }

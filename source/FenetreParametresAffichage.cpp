@@ -1,7 +1,7 @@
 //==============================================================================
 // Name        : FenetreParametresAffichage.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the FenetreParametresAffichage class
 //==============================================================================
 
@@ -55,10 +55,6 @@ void FenetreParametresAffichage::initialiserElementsGraphiques()
     this->ui->spinBoxEpaisseurPointsManuels->setMinimum(0);
     this->ui->spinBoxEpaisseurPointsManuels->setMaximum(20);
     this->ui->buttonBox->button(QDialogButtonBox::Cancel)->setText("Annuler");
-
-    this->ui->comboBoxFormatNotationNombres->setEnabled(false);
-    this->ui->spinBoxNombreDecimalesOuChiffresSignificatifs->setEnabled(false);
-    // TODO Gestion de la disponibilité et de l'affichage selon les paramètres sélectionnés
 }
 
 void FenetreParametresAffichage::actualiserElementsGraphiques()

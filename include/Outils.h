@@ -1,14 +1,15 @@
 //==============================================================================
 // Name        : Outils.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the Outils elements
 //==============================================================================
 
-#ifndef OUTILS_H_
-#define OUTILS_H_
+#ifndef OUTILS_H
+#define OUTILS_H
 
 #include "Point.h"
+#include <QChar>
 #include <QList>
 #include <QPoint>
 #include <QString>
@@ -19,7 +20,7 @@ int getValeurMoyenne(const QList<int>& listeValeurs);
 int getValeurMinimale(const QList<int>& listeValeurs);
 int getValeurMaximale(const QList<int>& listeValeurs);
 const QList<QList<int>> listesValeursAdjacentes(const QList<int>& listeValeurs);
-const QStringList listeSousElements(const QString& chaineElements, const char& sep);
+const QStringList listeSousElements(const QString& chaineElements, const QChar& sep);
 void interpolationNumerique(const double& x1, const double& y1, const double& x2, const double& y2,
         const double& x, double& y);
 void interpolationNumerique(const Point& point1, const Point& point2, Point& point);
@@ -30,4 +31,4 @@ void testerConversionNiveauxDeGris(const int& nombreNiveauxDeGris);
 void testerConversionTeintesSaturees(const int& nombreNiveauxDeGris,
         const int& nombreTeintesSaturees, const int& seuilSaturation);
 
-#endif /* OUTILS_H_ */
+#endif /* OUTILS_H */

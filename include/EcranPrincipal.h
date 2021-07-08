@@ -1,12 +1,12 @@
 //==============================================================================
 // Name        : EcranPrincipal.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the EcranPrincipal class
 //==============================================================================
 
-#ifndef ECRANPRINCIPAL_H_
-#define ECRANPRINCIPAL_H_
+#ifndef ECRANPRINCIPAL_H
+#define ECRANPRINCIPAL_H
 
 #include "Etude.h"
 #include <QMainWindow>
@@ -25,7 +25,7 @@ class EcranPrincipal : public QMainWindow
 
 public:
     // Constructeurs et destructeurs
-    explicit EcranPrincipal(QWidget* parent = 0);
+    explicit EcranPrincipal(QWidget* parent = nullptr);
     ~EcranPrincipal();
 
     // Getters
@@ -46,6 +46,8 @@ protected:
     void sauverEtudeCourante();
     void exporterListeDePointsCourante();
     void exporterImageConvertieCourante();
+    void chargerParametresExistants();
+    void sauverParametresCourants();
     void verifierEtatSauvegardeEtude();
     void actualiserEtudeReference();
     void actualiserCoordonneesPoints();
@@ -74,6 +76,8 @@ protected slots:
     void on_actionParametresConversion_triggered();
     void on_actionParametresRecherche_triggered();
     void on_actionParametresExport_triggered();
+    void on_actionChargerParametres_triggered();
+    void on_actionSauverParametres_triggered();
     void on_actionDocumentation_triggered();
     void on_actionAbout_triggered();
     void on_pushButtonConvertir_clicked();
@@ -118,4 +122,4 @@ private:
     QPushButton* pushButtonActif;
 };
 
-#endif /* ECRANPRINCIPAL_H_ */
+#endif /* ECRANPRINCIPAL_H */

@@ -1,13 +1,14 @@
 //==============================================================================
 // Name        : Image.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the Image class
 //==============================================================================
 
-#ifndef IMAGE_H_
-#define IMAGE_H_
+#ifndef IMAGE_H
+#define IMAGE_H
 
+#include <QChar>
 #include <QImage>
 #include <QList>
 #include <QPoint>
@@ -23,6 +24,11 @@ public:
     Image(const Image& image);
     virtual ~Image();
 
+    // Opérateurs
+    Image& operator=(const Image& image);
+    bool operator==(const Image& image) const;
+    bool operator!=(const Image& image) const;
+
     // Getters
     const QImage& getImageSource() const;
     const QImage& getImageConvertie() const;
@@ -36,8 +42,8 @@ public:
     void set(const QImage& imageSource, const QImage& imageConvertie);
     void copy(const Image& image);
     bool equals(const Image& image) const;
-    void fromString(const QString& fromString, const char& sep);
-    const QString toString(const char& sep) const;
+    void fromString(const QString& fromString, const QChar& sep);
+    const QString toString(const QChar& sep) const;
 
     // Méthodes spécifiques
     void restaurerImage();
@@ -64,4 +70,4 @@ private:
     QImage imageConvertie;
 };
 
-#endif /* IMAGE_H_ */
+#endif /* IMAGE_H */

@@ -1,13 +1,14 @@
 //==============================================================================
 // Name        : ParametresPoint.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the ParametresPoint class
 //==============================================================================
 
-#ifndef PARAMETRESPOINT_H_
-#define PARAMETRESPOINT_H_
+#ifndef PARAMETRESPOINT_H
+#define PARAMETRESPOINT_H
 
+#include <QChar>
 #include <QMap>
 #include <QRgb>
 #include <QString>
@@ -20,6 +21,11 @@ public:
     ParametresPoint(const int& stylePoint, const int& epaisseurPoint, const QRgb& couleurPoint);
     ParametresPoint(const ParametresPoint& parametresPoint);
     virtual ~ParametresPoint();
+
+    // Opérateurs
+    ParametresPoint& operator=(const ParametresPoint& parametresPoint);
+    bool operator==(const ParametresPoint& parametresPoint) const;
+    bool operator!=(const ParametresPoint& parametresPoint) const;
 
     // Getters
     const int& getStylePoint() const;
@@ -36,8 +42,8 @@ public:
     void set(const int& stylePoint, const int& epaisseurPoint, const QRgb& couleurPoint);
     void copy(const ParametresPoint& parametresPoint);
     bool equals(const ParametresPoint& parametresPoint) const;
-    void fromString(const QString& fromString, const char& sep);
-    const QString toString(const char& sep) const;
+    void fromString(const QString& fromString, const QChar& sep);
+    const QString toString(const QChar& sep) const;
 
     // Méthodes spécifiques
     const QString getStylePointTexte() const;
@@ -67,4 +73,4 @@ private:
     static const QMap<int, QString> stylesPointsTexte;
 };
 
-#endif /* PARAMETRESPOINT_H_ */
+#endif /* PARAMETRESPOINT_H */

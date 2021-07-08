@@ -1,13 +1,14 @@
 //==============================================================================
 // Name        : ParametresConversion.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the ParametresConversion class
 //==============================================================================
 
-#ifndef PARAMETRESCONVERSION_H_
-#define PARAMETRESCONVERSION_H_
+#ifndef PARAMETRESCONVERSION_H
+#define PARAMETRESCONVERSION_H
 
+#include <QChar>
 #include <QMap>
 #include <QString>
 
@@ -21,6 +22,11 @@ public:
             const int& seuilSaturation);
     ParametresConversion(const ParametresConversion& parametresConversion);
     virtual ~ParametresConversion();
+
+    // Opérateurs
+    ParametresConversion& operator=(const ParametresConversion& parametresConversion);
+    bool operator==(const ParametresConversion& parametresConversion) const;
+    bool operator!=(const ParametresConversion& parametresConversion) const;
 
     // Getters
     const int& getMethodeConversion() const;
@@ -43,8 +49,8 @@ public:
             const int& seuilSaturation);
     void copy(const ParametresConversion& parametresConversion);
     bool equals(const ParametresConversion& parametresConversion) const;
-    void fromString(const QString& fromString, const char& sep);
-    const QString toString(const char& sep) const;
+    void fromString(const QString& fromString, const QChar& sep);
+    const QString toString(const QChar& sep) const;
 
     // Méthodes spécifiques
     const QString getMethodeConversionTexte() const;
@@ -79,4 +85,4 @@ private:
     static const QMap<int, QString> methodesConversionTexte;
 };
 
-#endif /* PARAMETRESCONVERSION_H_ */
+#endif /* PARAMETRESCONVERSION_H */

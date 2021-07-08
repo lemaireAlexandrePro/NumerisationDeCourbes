@@ -1,18 +1,19 @@
 //==============================================================================
 // Name        : Parametres.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the Parametres class
 //==============================================================================
 
-#ifndef PARAMETRES_H_
-#define PARAMETRES_H_
+#ifndef PARAMETRES_H
+#define PARAMETRES_H
 
 #include "ParametresAffichage.h"
 #include "ParametresConversion.h"
 #include "ParametresExport.h"
 #include "ParametresFichiers.h"
 #include "ParametresRecherche.h"
+#include <QChar>
 #include <QString>
 
 class Parametres
@@ -27,6 +28,11 @@ public:
             const ParametresExport& parametresExport);
     Parametres(const Parametres& parametres);
     virtual ~Parametres();
+
+    // Opérateurs
+    Parametres& operator=(const Parametres& parametres);
+    bool operator==(const Parametres& parametres) const;
+    bool operator!=(const Parametres& parametres) const;
 
     // Getters
     const ParametresFichiers& getParametresFichiers() const;
@@ -51,8 +57,8 @@ public:
             const ParametresExport& parametresExport);
     void copy(const Parametres& parametres);
     bool equals(const Parametres& parametres) const;
-    void fromString(const QString& fromString, const char& sep);
-    const QString toString(const char& sep) const;
+    void fromString(const QString& fromString, const QChar& sep);
+    const QString toString(const QChar& sep) const;
 
     // Méthodes spécifiques
 
@@ -65,4 +71,4 @@ private:
     ParametresExport parametresExport;
 };
 
-#endif /* PARAMETRES_H_ */
+#endif /* PARAMETRES_H */

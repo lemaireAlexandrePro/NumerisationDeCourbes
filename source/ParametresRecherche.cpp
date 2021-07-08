@@ -1,12 +1,13 @@
 //==============================================================================
 // Name        : ParametresRecherche.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the ParametresRecherche class
 //==============================================================================
 
 #include "ParametresRecherche.h"
 #include "Outils.h"
+#include <cmath>
 #include <QStringList>
 
 const int ParametresRecherche::seuilToleranceNiveauxDeGrisDefaut = 32;
@@ -42,6 +43,22 @@ ParametresRecherche::ParametresRecherche(const ParametresRecherche& parametresRe
 
 ParametresRecherche::~ParametresRecherche()
 {
+}
+
+ParametresRecherche& ParametresRecherche::operator=(const ParametresRecherche& parametresRecherche)
+{
+    this->copy(parametresRecherche);
+    return *this;
+}
+
+bool ParametresRecherche::operator==(const ParametresRecherche& parametresRecherche) const
+{
+    return this->equals(parametresRecherche);
+}
+
+bool ParametresRecherche::operator!=(const ParametresRecherche& parametresRecherche) const
+{
+    return !this->equals(parametresRecherche);
 }
 
 const int& ParametresRecherche::getSeuilToleranceNiveauxDeGris() const
@@ -138,46 +155,47 @@ bool ParametresRecherche::equals(const ParametresRecherche& parametresRecherche)
     return true;
 }
 
-void ParametresRecherche::fromString(const QString& fromString, const char& sep)
+void ParametresRecherche::fromString(const QString& fromString, const QChar& sep)
 {
     const QStringList fromStringList = listeSousElements(fromString, sep);
     this->setSeuilToleranceNiveauxDeGris(fromStringList.at(0).toInt());
     this->setSeuilToleranceTeintesSaturees(fromStringList.at(1).toInt());
-    this->setSelectionValeursMoyennes((bool) fromStringList.at(2).toInt());
-    this->setSelectionValeursMinimales((bool) fromStringList.at(3).toInt());
-    this->setSelectionValeursMaximales((bool) fromStringList.at(4).toInt());
+    this->setSelectionValeursMoyennes(static_cast<bool>(fromStringList.at(2).toInt()));
+    this->setSelectionValeursMinimales(static_cast<bool>(fromStringList.at(3).toInt()));
+    this->setSelectionValeursMaximales(static_cast<bool>(fromStringList.at(4).toInt()));
 }
 
-const QString ParametresRecherche::toString(const char& sep) const
+const QString ParametresRecherche::toString(const QChar& sep) const
 {
     QString toString;
     toString += QString::number(this->getSeuilToleranceNiveauxDeGris()) + sep;
     toString += QString::number(this->getSeuilToleranceTeintesSaturees()) + sep;
-    toString += QString::number((int) this->getSelectionValeursMoyennes()) + sep;
-    toString += QString::number((int) this->getSelectionValeursMinimales()) + sep;
-    toString += QString::number((int) this->getSelectionValeursMaximales());
+    toString += QString::number(this->getSelectionValeursMoyennes()) + sep;
+    toString += QString::number(this->getSelectionValeursMinimales()) + sep;
+    toString += QString::number(this->getSelectionValeursMaximales());
     return toString;
 }
 
 double ParametresRecherche::getSeuilToleranceNiveauxDeGrisFacteur() const
 {
-    return ((double) this->getSeuilToleranceNiveauxDeGris() / 255.0);
+    return (this->getSeuilToleranceNiveauxDeGris() / 255.0);
 }
 
 double ParametresRecherche::getSeuilToleranceTeintesSatureesFacteur() const
 {
-    return ((double) this->getSeuilToleranceTeintesSaturees() / 360.0);
+    return (this->getSeuilToleranceTeintesSaturees() / 360.0);
 }
 
 void ParametresRecherche::setSeuilToleranceNiveauxDeGrisFacteur(
         const double& seuilToleranceNiveauxDeGrisFacteur)
 {
-    this->setSeuilToleranceNiveauxDeGris((int) round(seuilToleranceNiveauxDeGrisFacteur * 255.0));
+    this->setSeuilToleranceNiveauxDeGris(
+            static_cast<int>(round(seuilToleranceNiveauxDeGrisFacteur * 255.0)));
 }
 
 void ParametresRecherche::setSeuilToleranceTeintesSatureesFacteur(
         const double& seuilToleranceTeintesSatureesFacteur)
 {
     this->setSeuilToleranceTeintesSaturees(
-            (int) round(seuilToleranceTeintesSatureesFacteur * 360.0));
+            static_cast<int>(round(seuilToleranceTeintesSatureesFacteur * 360.0)));
 }

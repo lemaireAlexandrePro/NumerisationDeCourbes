@@ -1,17 +1,19 @@
 //==============================================================================
 // Name        : Etude.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the Etude class
 //==============================================================================
 
-#ifndef ETUDE_H_
-#define ETUDE_H_
+#ifndef ETUDE_H
+#define ETUDE_H
 
 #include "Image.h"
 #include "Parametres.h"
+#include "ParametresGraphique.h"
 #include "Point.h"
 #include "Repere.h"
+#include <QChar>
 #include <QList>
 #include <QPoint>
 #include <QRgb>
@@ -26,6 +28,11 @@ public:
             const Parametres& parametres);
     Etude(const Etude& etude);
     virtual ~Etude();
+
+    // Opérateurs
+    Etude& operator=(const Etude& etude);
+    bool operator==(const Etude& etude) const;
+    bool operator!=(const Etude& etude) const;
 
     // Getters
     const Image& getImage() const;
@@ -45,14 +52,17 @@ public:
             const Parametres& parametres);
     void copy(const Etude& etude);
     bool equals(const Etude& etude) const;
-    void fromString(const QString& fromString, const char& sep);
-    const QString toString(const char& sep) const;
+    void fromString(const QString& fromString, const QChar& sep);
+    const QString toString(const QChar& sep) const;
 
     // Méthodes spécifiques
     const QList<Courbe> getListeDeCourbes() const;
     const QList<Point> getListeDePointsManuels() const;
+    const ParametresGraphique getParametresGraphiques() const;
     bool chargerEtude(const QString& cheminFichierEtude);
     bool sauverEtude(const QString& cheminFichierEtude);
+    bool chargerParametres(const QString& cheminFichierParametres);
+    bool sauverParametres(const QString& cheminFichierParametres);
     bool exporterImageConvertie(const QString& cheminFichierImageConvertie);
     bool exporterListeDePoints(const QString& cheminFichierExport);
     void restaurerImage();
@@ -100,4 +110,4 @@ private:
     QPoint pointPixelArrivee;
 };
 
-#endif /* ETUDE_H_ */
+#endif /* ETUDE_H */

@@ -1,7 +1,7 @@
 //==============================================================================
 // Name        : Repere.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the Repere class
 //==============================================================================
 
@@ -29,6 +29,22 @@ Repere::Repere(const Repere& repere) :
 
 Repere::~Repere()
 {
+}
+
+Repere& Repere::operator=(const Repere& repere)
+{
+    this->copy(repere);
+    return *this;
+}
+
+bool Repere::operator==(const Repere& repere) const
+{
+    return this->equals(repere);
+}
+
+bool Repere::operator!=(const Repere& repere) const
+{
+    return !this->equals(repere);
 }
 
 const Point& Repere::getPointX0() const
@@ -104,7 +120,7 @@ bool Repere::equals(const Repere& repere) const
     return true;
 }
 
-void Repere::fromString(const QString& fromString, const char& sep)
+void Repere::fromString(const QString& fromString, const QChar& sep)
 {
     const QStringList fromStringList = listeSousElements(fromString, sep);
     Point pointX0 = this->getPointX0();
@@ -121,13 +137,13 @@ void Repere::fromString(const QString& fromString, const char& sep)
     this->setPointY1(pointY1);
 }
 
-const QString Repere::toString(const char& sep) const
+const QString Repere::toString(const QChar& sep) const
 {
     QString toString;
-    toString += "(" + this->getPointX0().toString(sep) + ")" + sep;
-    toString += "(" + this->getPointX1().toString(sep) + ")" + sep;
-    toString += "(" + this->getPointY0().toString(sep) + ")" + sep;
-    toString += "(" + this->getPointY1().toString(sep) + ")";
+    toString += QString("(%1)").arg(this->getPointX0().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getPointX1().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getPointY0().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getPointY1().toString(sep));
     return toString;
 }
 
@@ -150,14 +166,14 @@ void Repere::pixelVersReel(const int& pointPixelX, const int& pointPixelY, doubl
     const Point& pointY0 = this->getPointY0();
     const Point& pointY1 = this->getPointY1();
 
-    const double x0px = (double) pointX0.getPointPixelX();
-    const double x0py = (double) pointX0.getPointPixelY();
-    const double x1px = (double) pointX1.getPointPixelX();
-    const double x1py = (double) pointX1.getPointPixelY();
-    const double y0px = (double) pointY0.getPointPixelX();
-    const double y0py = (double) pointY0.getPointPixelY();
-    const double y1px = (double) pointY1.getPointPixelX();
-    const double y1py = (double) pointY1.getPointPixelY();
+    const double x0px = pointX0.getPointPixelX();
+    const double x0py = pointX0.getPointPixelY();
+    const double x1px = pointX1.getPointPixelX();
+    const double x1py = pointX1.getPointPixelY();
+    const double y0px = pointY0.getPointPixelX();
+    const double y0py = pointY0.getPointPixelY();
+    const double y1px = pointY1.getPointPixelX();
+    const double y1py = pointY1.getPointPixelY();
 
     const double x0rx = pointX0.getPointReelX();
     const double x1rx = pointX1.getPointReelX();
@@ -169,10 +185,10 @@ void Repere::pixelVersReel(const int& pointPixelX, const int& pointPixelY, doubl
     const double x43 = y1px - y0px;
     const double y43 = y1py - y0py;
 
-    const double penteX = ((x0px - (double) pointPixelX)
-            - (x0py - (double) pointPixelY) * (x43 / y43)) / (x21 - y21 * (x43 / y43));
-    const double penteY = ((y0py - (double) pointPixelY)
-            - (y0px - (double) pointPixelX) * (y21 / x21)) / (y43 - x43 * (y21 / x21));
+    const double penteX = ((x0px - pointPixelX) - (x0py - pointPixelY) * (x43 / y43))
+            / (x21 - y21 * (x43 / y43));
+    const double penteY = ((y0py - pointPixelY) - (y0px - pointPixelX) * (y21 / x21))
+            / (y43 - x43 * (y21 / x21));
 
     pointReelX = -penteX * (x1rx - x0rx) + x0rx;
     pointReelY = -penteY * (y1ry - y0ry) + y0ry;

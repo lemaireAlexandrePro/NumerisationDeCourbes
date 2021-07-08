@@ -1,16 +1,19 @@
 //==============================================================================
 // Name        : Etude.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the Etude class
 //==============================================================================
 
 #include "Etude.h"
 #include "Outils.h"
+#include "ParametresAffichage.h"
+#include "ParametresAxe.h"
 #include "ParametresConversion.h"
 #include "ParametresExport.h"
 #include "ParametresFichiers.h"
 #include "ParametresRecherche.h"
+#include <cmath>
 #include <QColor>
 #include <QFile>
 #include <QImage>
@@ -39,6 +42,22 @@ Etude::Etude(const Etude& etude) :
 
 Etude::~Etude()
 {
+}
+
+Etude& Etude::operator=(const Etude& etude)
+{
+    this->copy(etude);
+    return *this;
+}
+
+bool Etude::operator==(const Etude& etude) const
+{
+    return this->equals(etude);
+}
+
+bool Etude::operator!=(const Etude& etude) const
+{
+    return !this->equals(etude);
 }
 
 const Image& Etude::getImage() const
@@ -113,32 +132,32 @@ bool Etude::equals(const Etude& etude) const
     return true;
 }
 
-void Etude::fromString(const QString& fromString, const char& sep)
+void Etude::fromString(const QString& fromString, const QChar& sep)
 {
-    // TODO void Etude::fromString(const QString& fromString, const char& sep)
+    // TODO void Etude::fromString(const QString& fromString, const QChar& sep)
     Q_UNUSED(fromString);
     Q_UNUSED(sep);
 }
 
-const QString Etude::toString(const char& sep) const
+const QString Etude::toString(const QChar& sep) const
 {
     QString toString;
     const QList<Point>& listeDePoints = this->getListeDePoints();
     const int nombreDePoints = listeDePoints.count();
-    toString += "(" + this->getImage().toString(sep) + ")" + sep;
-    toString += "(" + this->getRepere().toString(sep) + ")" + sep;
-    toString += "[";
+    toString += QString("(%1)").arg(this->getImage().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getRepere().toString(sep)) + sep;
+    toString += QString("[");
     for (int itPoint = 0; itPoint < nombreDePoints; itPoint++)
     {
         const Point& pointCourant = listeDePoints.at(itPoint);
-        toString += "(" + pointCourant.toString(sep) + ")";
+        toString += QString("(%1)").arg(pointCourant.toString(sep));
         if (itPoint < (nombreDePoints - 1))
         {
             toString += sep;
         }
     }
-    toString += "]" + sep;
-    toString += "(" + this->getParametres().toString(sep) + ")";
+    toString += QString("]") + sep;
+    toString += QString("(%1)").arg(this->getParametres().toString(sep));
     return toString;
 }
 
@@ -187,13 +206,49 @@ const QList<Point> Etude::getListeDePointsManuels() const
     return listeDePointsManuels;
 }
 
+const ParametresGraphique Etude::getParametresGraphiques() const
+{
+    ParametresGraphique parametresGraphiques;
+    ParametresAxe parametresAxeHorizontal = parametresGraphiques.getParametresAxeHorizontal();
+    ParametresAxe parametresAxeVertical = parametresGraphiques.getParametresAxeVertical();
+    const QList<Point>& listeDePoints = this->getListeDePoints();
+    const int nombreDePoints = listeDePoints.count();
+    for (int itPoint = 0; itPoint < nombreDePoints; itPoint++)
+    {
+        const Point& pointCourant = listeDePoints.at(itPoint);
+        const double& pointReelXCourant = pointCourant.getPointReelX();
+        const double& pointReelYCourant = pointCourant.getPointReelY();
+        if (pointReelXCourant < parametresAxeHorizontal.getBorneInferieure() || itPoint == 0)
+        {
+            parametresAxeHorizontal.setBorneInferieure(pointReelXCourant);
+        }
+        if (pointReelXCourant > parametresAxeHorizontal.getBorneSuperieure() || itPoint == 0)
+        {
+            parametresAxeHorizontal.setBorneSuperieure(pointReelXCourant);
+        }
+        if (pointReelYCourant < parametresAxeVertical.getBorneInferieure() || itPoint == 0)
+        {
+            parametresAxeVertical.setBorneInferieure(pointReelYCourant);
+        }
+        if (pointReelYCourant > parametresAxeVertical.getBorneSuperieure() || itPoint == 0)
+        {
+            parametresAxeVertical.setBorneSuperieure(pointReelYCourant);
+        }
+    }
+    parametresAxeHorizontal.ajuster();
+    parametresAxeVertical.ajuster();
+    parametresGraphiques.setParametresAxeHorizontal(parametresAxeHorizontal);
+    parametresGraphiques.setParametresAxeVertical(parametresAxeVertical);
+    return parametresGraphiques;
+}
+
 bool Etude::chargerEtude(const QString& cheminFichierEtude)
 {
     QFile fichierEtude(cheminFichierEtude);
     if (!fichierEtude.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
 
-    const char separateur = ';';
+    const QChar separateur = ';';
     QTextStream fluxEntree(&fichierEtude);
     while (!fluxEntree.atEnd())
     {
@@ -246,7 +301,7 @@ bool Etude::sauverEtude(const QString& cheminFichierEtude)
     if (!fichierEtude.open(QIODevice::WriteOnly | QIODevice::Text))
         return false;
 
-    const char separateur = ';';
+    const QChar separateur = ';';
     QTextStream fluxSortie(&fichierEtude);
     const QList<Point>& listeDePoints = this->getListeDePoints();
     const int nombreDePoints = listeDePoints.count();
@@ -260,6 +315,84 @@ bool Etude::sauverEtude(const QString& cheminFichierEtude)
         const Point& pointCourant = listeDePoints.at(itPoint);
         fluxSortie << pointCourant.toString(separateur) << endl;
     }
+    return true;
+}
+
+bool Etude::chargerParametres(const QString& cheminFichierParametres)
+{
+    QFile fichierParametres(cheminFichierParametres);
+    if (!fichierParametres.open(QIODevice::ReadOnly | QIODevice::Text))
+        return false;
+
+    const QChar separateur = ';';
+    QTextStream fluxEntree(&fichierParametres);
+    while (!fluxEntree.atEnd())
+    {
+        QString ligneEntree = fluxEntree.readLine();
+        if (ligneEntree == "[PARAMETRES_AFFICHAGE]")
+        {
+            ligneEntree = fluxEntree.readLine();
+            Parametres parametres = this->getParametres();
+            ParametresAffichage parametresAffichage = parametres.getParametresAffichage();
+            parametresAffichage.fromString(ligneEntree, separateur);
+            parametres.setParametresAffichage(parametresAffichage);
+            this->setParametres(parametres);
+        }
+        else if (ligneEntree == "[PARAMETRES_CONVERSION]")
+        {
+            ligneEntree = fluxEntree.readLine();
+            Parametres parametres = this->getParametres();
+            ParametresConversion parametresConversion = parametres.getParametresConversion();
+            parametresConversion.fromString(ligneEntree, separateur);
+            parametres.setParametresConversion(parametresConversion);
+            this->setParametres(parametres);
+            this->restaurerImage();
+            this->convertirImage();
+        }
+        else if (ligneEntree == "[PARAMETRES_RECHERCHE]")
+        {
+            ligneEntree = fluxEntree.readLine();
+            Parametres parametres = this->getParametres();
+            ParametresRecherche parametresRecherche = parametres.getParametresRecherche();
+            parametresRecherche.fromString(ligneEntree, separateur);
+            parametres.setParametresRecherche(parametresRecherche);
+            this->setParametres(parametres);
+        }
+        else if (ligneEntree == "[PARAMETRES_EXPORT]")
+        {
+            ligneEntree = fluxEntree.readLine();
+            Parametres parametres = this->getParametres();
+            ParametresExport parametresExport = parametres.getParametresExport();
+            parametresExport.fromString(ligneEntree, separateur);
+            parametres.setParametresExport(parametresExport);
+            this->setParametres(parametres);
+        }
+    }
+    return true;
+}
+
+bool Etude::sauverParametres(const QString& cheminFichierParametres)
+{
+    Parametres parametres = this->getParametres();
+    ParametresFichiers parametresFichiers = parametres.getParametresFichiers();
+    parametresFichiers.setCheminFichierParametres(cheminFichierParametres);
+    parametres.setParametresFichiers(parametresFichiers);
+    this->setParametres(parametres);
+
+    QFile fichierParametres(cheminFichierParametres);
+    if (!fichierParametres.open(QIODevice::WriteOnly | QIODevice::Text))
+        return false;
+
+    const QChar separateur = ';';
+    QTextStream fluxSortie(&fichierParametres);
+    fluxSortie << "[PARAMETRES_AFFICHAGE]" << endl;
+    fluxSortie << this->getParametres().getParametresAffichage().toString(separateur) << endl;
+    fluxSortie << "[PARAMETRES_CONVERSION]" << endl;
+    fluxSortie << this->getParametres().getParametresConversion().toString(separateur) << endl;
+    fluxSortie << "[PARAMETRES_RECHERCHE]" << endl;
+    fluxSortie << this->getParametres().getParametresRecherche().toString(separateur) << endl;
+    fluxSortie << "[PARAMETRES_EXPORT]" << endl;
+    fluxSortie << this->getParametres().getParametresExport().toString(separateur) << endl;
     return true;
 }
 
@@ -425,8 +558,8 @@ void Etude::rechercherPoints(const QPoint& pointPixel, const QRgb& couleurRefere
     const Parametres& parametres = this->getParametres();
     const ParametresRecherche& parametresRecherche = parametres.getParametresRecherche();
     const int& seuilToleranceNiveauxDeGris = parametresRecherche.getSeuilToleranceNiveauxDeGris();
-    const int& seuilToleranceTeintesSaturees = (int) round(
-            (double) parametresRecherche.getSeuilToleranceTeintesSaturees() / 2.0);
+    const int& seuilToleranceTeintesSaturees = static_cast<int>(round(
+            parametresRecherche.getSeuilToleranceTeintesSaturees() / 2.0));
     for (int itPointProche = 0; itPointProche < nombreDePointsProches; itPointProche++)
     {
         const QPoint& pointCourant = listeDePointsProches.at(itPointProche);
@@ -538,16 +671,14 @@ const QList<QPoint> Etude::filtrerPointsCourbes(const QList<QPoint>& listeDePoin
         QList<int> valeursAdjacentesRetenues = listeValeursAdjacentes.at(0);
         if (listeValeursAdjacentes.count() > 1)
         {
-            const double valeurMoyennePrecedente = (double) getValeurMoyenne(
-                    mapPointsRecherche[x - 1]);
+            const double valeurMoyennePrecedente = getValeurMoyenne(mapPointsRecherche[x - 1]);
             for (int itValeursAdjacentes = 0; itValeursAdjacentes < nombreValeursAdjacentes;
                     itValeursAdjacentes++)
             {
                 const QList<int>& valeursAdjacentes = listeValeursAdjacentes.at(
                         itValeursAdjacentes);
-                const double valeurMoyenne = (double) getValeurMoyenne(valeursAdjacentes);
-                const double valeurMoyenneRetenue = (double) getValeurMoyenne(
-                        valeursAdjacentesRetenues);
+                const double valeurMoyenne = getValeurMoyenne(valeursAdjacentes);
+                const double valeurMoyenneRetenue = getValeurMoyenne(valeursAdjacentesRetenues);
                 if (fabs(valeurMoyenne - valeurMoyennePrecedente)
                         < fabs(valeurMoyenneRetenue - valeurMoyennePrecedente))
                 {
@@ -596,8 +727,8 @@ const QList<Courbe> Etude::construireCourbes(const QList<QPoint>& listeDePoints)
     const bool& selectionValeursMoyennes = parametresRecherche.getSelectionValeursMoyennes();
     const bool& selectionValeursMinimales = parametresRecherche.getSelectionValeursMinimales();
     const bool& selectionValeursMaximales = parametresRecherche.getSelectionValeursMaximales();
-    const int nombreDeCourbes = (int) selectionValeursMoyennes + (int) selectionValeursMinimales
-            + (int) selectionValeursMaximales;
+    const int nombreDeCourbes = selectionValeursMoyennes + selectionValeursMinimales
+            + selectionValeursMaximales;
     const int nombreDePoints = listeDePoints.count();
     const int nombreDePointsCourbe = (nombreDeCourbes > 0) ? (nombreDePoints / nombreDeCourbes) : 0;
 

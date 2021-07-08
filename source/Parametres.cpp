@@ -1,7 +1,7 @@
 //==============================================================================
 // Name        : Parametres.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the Parametres class
 //==============================================================================
 
@@ -32,6 +32,22 @@ Parametres::Parametres(const Parametres& parametres) :
 
 Parametres::~Parametres()
 {
+}
+
+Parametres& Parametres::operator=(const Parametres& parametres)
+{
+    this->copy(parametres);
+    return *this;
+}
+
+bool Parametres::operator==(const Parametres& parametres) const
+{
+    return this->equals(parametres);
+}
+
+bool Parametres::operator!=(const Parametres& parametres) const
+{
+    return !this->equals(parametres);
 }
 
 const ParametresFichiers& Parametres::getParametresFichiers() const
@@ -124,7 +140,7 @@ bool Parametres::equals(const Parametres& parametres) const
     return true;
 }
 
-void Parametres::fromString(const QString& fromString, const char& sep)
+void Parametres::fromString(const QString& fromString, const QChar& sep)
 {
     const QStringList fromStringList = listeSousElements(fromString, sep);
     ParametresFichiers parametresFichiers = this->getParametresFichiers();
@@ -144,13 +160,13 @@ void Parametres::fromString(const QString& fromString, const char& sep)
     this->setParametresExport(parametresExport);
 }
 
-const QString Parametres::toString(const char& sep) const
+const QString Parametres::toString(const QChar& sep) const
 {
     QString toString;
-    toString += "(" + this->getParametresFichiers().toString(sep) + ")" + sep;
-    toString += "(" + this->getParametresAffichage().toString(sep) + ")" + sep;
-    toString += "(" + this->getParametresConversion().toString(sep) + ")" + sep;
-    toString += "(" + this->getParametresRecherche().toString(sep) + ")" + sep;
-    toString += "(" + this->getParametresExport().toString(sep) + ")";
+    toString += QString("(%1)").arg(this->getParametresFichiers().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getParametresAffichage().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getParametresConversion().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getParametresRecherche().toString(sep)) + sep;
+    toString += QString("(%1)").arg(this->getParametresExport().toString(sep));
     return toString;
 }

@@ -1,17 +1,21 @@
 //==============================================================================
 // Name        : VueGraphiqueEtude.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the VueGraphiqueEtude class
 //==============================================================================
 
 #include "VueGraphiqueEtude.h"
+#include <cmath>
 #include <QBrush>
 #include <QColor>
 #include <QGraphicsPixmapItem>
-#include <QList>
+#include <QImage>
+#include <QPainterPath>
 #include <QPen>
 #include <QPixmap>
+#include <QPoint>
+#include <QPolygon>
 #include <QRgb>
 
 const double VueGraphiqueEtude::facteurZoomIn = 1.25;
@@ -80,9 +84,12 @@ void VueGraphiqueEtude::dessiner(const Etude& etude)
 
 void VueGraphiqueEtude::dessinerImage(const Image& image)
 {
-    QGraphicsPixmapItem* itemImage = new QGraphicsPixmapItem(
-            QPixmap::fromImage(image.getImageConvertie()));
+    const QImage& imageConvertie = image.getImageConvertie();
+    const int largeurImage = imageConvertie.width();
+    const int hauteurImage = imageConvertie.height();
+    QGraphicsPixmapItem* itemImage = new QGraphicsPixmapItem(QPixmap::fromImage(imageConvertie));
     this->scene()->addItem(itemImage);
+    this->scene()->setSceneRect(0, 0, largeurImage, hauteurImage);
 }
 
 void VueGraphiqueEtude::dessinerRepere(const Repere& repere, const ParametresTrait& parametresAxes,
@@ -105,14 +112,9 @@ void VueGraphiqueEtude::dessinerCourbe(const Courbe& courbe,
         const ParametresTrait& parametresCourbes, const ParametresPoint& parametresPointsCourbes)
 {
     const int nombreDePointsCourbe = courbe.count();
-    for (int itPointCourbe = 0; itPointCourbe < (nombreDePointsCourbe - 1); itPointCourbe++)
-    {
-        const Point& pointCourant = courbe.at(itPointCourbe);
-        const Point& pointSuivant = courbe.at(itPointCourbe + 1);
-        this->dessinerTrait(pointCourant, pointSuivant, parametresCourbes);
-    }
     const Point& premierPoint = courbe.at(0);
     const Point& dernierPoint = courbe.at(nombreDePointsCourbe - 1);
+    this->dessinerTraitContinu(courbe, parametresCourbes);
     this->dessinerPoint(premierPoint, parametresPointsCourbes);
     this->dessinerPoint(dernierPoint, parametresPointsCourbes);
 }
@@ -131,10 +133,10 @@ void VueGraphiqueEtude::dessinerPoint(const Point& point, const ParametresPoint&
     const QBrush brossePoint = QBrush(QColor(couleurPoint), Qt::SolidPattern);
     const QPen pinceauPoint = QPen(brossePoint, 0, Qt::SolidLine);
 
-    const double ppx = (double) point.getPointPixelX();
-    const double ppy = (double) point.getPointPixelY();
-    const double ppx_edit = ppx - floor((double) epaisseurPoint / 2.0);
-    const double ppy_edit = ppy - floor((double) epaisseurPoint / 2.0);
+    const double ppx = point.getPointPixelX();
+    const double ppy = point.getPointPixelY();
+    const double ppx_edit = ppx - floor(epaisseurPoint / 2.0);
+    const double ppy_edit = ppy - floor(epaisseurPoint / 2.0);
 
     if (stylePoint == ParametresPoint::CARRE)
     {
@@ -155,15 +157,39 @@ void VueGraphiqueEtude::dessinerTrait(const Point& point1, const Point& point2,
     const int& epaisseurTrait = parametresTrait.getEpaisseurTrait();
     const QRgb& couleurTrait = parametresTrait.getCouleurTrait();
     const QBrush brosseTrait = QBrush(QColor(couleurTrait), Qt::SolidPattern);
-    const QPen pinceauTrait = QPen(brosseTrait, epaisseurTrait, (Qt::PenStyle) (styleTrait + 1),
-            Qt::RoundCap, Qt::RoundJoin);
+    const QPen pinceauTrait = QPen(brosseTrait, epaisseurTrait,
+            static_cast<Qt::PenStyle>(styleTrait + 1), Qt::RoundCap, Qt::RoundJoin);
 
-    const double p1px = (double) point1.getPointPixelX();
-    const double p1py = (double) point1.getPointPixelY();
-    const double p2px = (double) point2.getPointPixelX();
-    const double p2py = (double) point2.getPointPixelY();
+    const double p1px = point1.getPointPixelX();
+    const double p1py = point1.getPointPixelY();
+    const double p2px = point2.getPointPixelX();
+    const double p2py = point2.getPointPixelY();
 
     this->scene()->addLine(p1px, p1py, p2px, p2py, pinceauTrait);
+}
+
+void VueGraphiqueEtude::dessinerTraitContinu(const QList<Point>& listeDePoints,
+        const ParametresTrait& parametresTrait)
+{
+    const int& styleTrait = parametresTrait.getStyleTrait();
+    const int& epaisseurTrait = parametresTrait.getEpaisseurTrait();
+    const QRgb& couleurTrait = parametresTrait.getCouleurTrait();
+    const QBrush brosseTrait = QBrush(QColor(couleurTrait), Qt::SolidPattern);
+    const QPen pinceauTrait = QPen(brosseTrait, epaisseurTrait,
+            static_cast<Qt::PenStyle>(styleTrait + 1), Qt::RoundCap, Qt::RoundJoin);
+
+    QPolygon polygone;
+    const int nombreDePoints = listeDePoints.count();
+    for (int itPoint = 0; itPoint < nombreDePoints; itPoint++)
+    {
+        const Point& pointCourant = listeDePoints.at(itPoint);
+        const QPoint& pointPixelCourant = pointCourant.getPointPixel();
+        polygone.append(pointPixelCourant);
+    }
+    QPainterPath chemin;
+    chemin.addPolygon(polygone);
+
+    this->scene()->addPath(chemin, pinceauTrait);
 }
 
 void VueGraphiqueEtude::keyPressEvent(QKeyEvent* event)

@@ -1,7 +1,7 @@
 //==============================================================================
 // Name        : FenetreDocumentation.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the FenetreDocumentation class
 //==============================================================================
 

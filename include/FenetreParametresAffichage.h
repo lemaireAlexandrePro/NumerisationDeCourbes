@@ -1,12 +1,12 @@
 //==============================================================================
 // Name        : FenetreParametresAffichage.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the FenetreParametresAffichage class
 //==============================================================================
 
-#ifndef FENETREPARAMETRESAFFICHAGE_H_
-#define FENETREPARAMETRESAFFICHAGE_H_
+#ifndef FENETREPARAMETRESAFFICHAGE_H
+#define FENETREPARAMETRESAFFICHAGE_H
 
 #include "ParametresAffichage.h"
 #include <QDialog>
@@ -23,7 +23,7 @@ class FenetreParametresAffichage : public QDialog
 
 public:
     // Constructeurs et destructeurs
-    explicit FenetreParametresAffichage(QWidget* parent = 0);
+    explicit FenetreParametresAffichage(QWidget* parent = nullptr);
     ~FenetreParametresAffichage();
 
     // Getters
@@ -67,4 +67,4 @@ private:
     ParametresAffichage parametresAffichage;
 };
 
-#endif /* FENETREPARAMETRESAFFICHAGE_H_ */
+#endif /* FENETREPARAMETRESAFFICHAGE_H */

@@ -1,12 +1,13 @@
 //==============================================================================
 // Name        : Image.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the Image class
 //==============================================================================
 
 #include "Image.h"
 #include "ParametresConversion.h"
+#include <cmath>
 #include <QByteArray>
 #include <QColor>
 
@@ -29,6 +30,22 @@ Image::Image(const Image& image) :
 
 Image::~Image()
 {
+}
+
+Image& Image::operator=(const Image& image)
+{
+    this->copy(image);
+    return *this;
+}
+
+bool Image::operator==(const Image& image) const
+{
+    return this->equals(image);
+}
+
+bool Image::operator!=(const Image& image) const
+{
+    return !this->equals(image);
 }
 
 const QImage& Image::getImageSource() const
@@ -76,22 +93,24 @@ bool Image::equals(const Image& image) const
     return true;
 }
 
-void Image::fromString(const QString& fromString, const char& sep)
+void Image::fromString(const QString& fromString, const QChar& sep)
 {
-    // TODO void Image::fromString(const QString& fromString, const char& sep)
+    // TODO void Image::fromString(const QString& fromString, const QChar& sep)
     Q_UNUSED(fromString);
     Q_UNUSED(sep);
 }
 
-const QString Image::toString(const char& sep) const
+const QString Image::toString(const QChar& sep) const
 {
     QString toString;
     const QImage& imageSource = this->getImageSource();
     const QImage& imageConvertie = this->getImageConvertie();
-    toString += "(" + QByteArray((char*) imageSource.bits(), imageSource.numBytes()).toHex() + ")"
-            + sep;
-    toString += "(" + QByteArray((char*) imageConvertie.bits(), imageConvertie.numBytes()).toHex()
-            + ")";
+    const QByteArray donneesImageSource = QByteArray(
+            reinterpret_cast<const char*>(imageSource.bits()), imageSource.byteCount());
+    const QByteArray donneesImageConvertie = QByteArray(
+            reinterpret_cast<const char*>(imageConvertie.bits()), imageConvertie.byteCount());
+    toString += QString("(%1)").arg(QString(donneesImageSource)) + sep;
+    toString += QString("(%1)").arg(QString(donneesImageConvertie));
     return toString;
 }
 
@@ -168,7 +187,7 @@ void Image::convertirImage(const int& methodeConversion, const int& seuilNoirEtB
             else if (methodeConversion == ParametresConversion::NIVEAUX_DE_GRIS)
             {
                 couleurConvertie = listeNiveauxDeGris.at(
-                        (int) round((double) qGray(couleurConvertie) / pasNiveauxDeGris));
+                        static_cast<int>(round(qGray(couleurConvertie) / pasNiveauxDeGris)));
             }
             else if (methodeConversion == ParametresConversion::TEINTES_SATUREES)
             {
@@ -177,12 +196,13 @@ void Image::convertirImage(const int& methodeConversion, const int& seuilNoirEtB
                 if (teinteCouleurConvertie == -1 || saturationCouleurConvertie <= seuilSaturation)
                 {
                     couleurConvertie = listeNiveauxDeGris.at(
-                            (int) round((double) qGray(couleurConvertie) / pasNiveauxDeGris));
+                            static_cast<int>(round(qGray(couleurConvertie) / pasNiveauxDeGris)));
                 }
                 else
                 {
                     couleurConvertie = listeTeintesSaturees.at(
-                            (int) round((double) teinteCouleurConvertie / pasTeintesSaturees));
+                            static_cast<int>(round(teinteCouleurConvertie / pasTeintesSaturees))
+                                    % nombreTeintesSaturees);
                 }
             }
             imageConvertie.setPixel(x, y, couleurConvertie);
@@ -193,12 +213,12 @@ void Image::convertirImage(const int& methodeConversion, const int& seuilNoirEtB
 
 double Image::getPasNiveauxDeGris(const int& nombreNiveauxDeGris) const
 {
-    return 255.0 / (double) (nombreNiveauxDeGris - 1);
+    return 255.0 / (nombreNiveauxDeGris - 1);
 }
 
 double Image::getPasTeintesSaturees(const int& nombreTeintesSaturees) const
 {
-    return 360.0 / (double) nombreTeintesSaturees;
+    return 360.0 / nombreTeintesSaturees;
 }
 
 const QList<QRgb> Image::getListeNiveauxDeGris(const int& nombreNiveauxDeGris) const
@@ -207,7 +227,7 @@ const QList<QRgb> Image::getListeNiveauxDeGris(const int& nombreNiveauxDeGris) c
     const double pasNiveauxDeGris = this->getPasNiveauxDeGris(nombreNiveauxDeGris);
     for (int itNiveauDeGris = 0; itNiveauDeGris < nombreNiveauxDeGris; itNiveauDeGris++)
     {
-        const int valeurGris = (int) round((double) itNiveauDeGris * pasNiveauxDeGris);
+        const int valeurGris = static_cast<int>(round(itNiveauDeGris * pasNiveauxDeGris));
         const QRgb niveauDeGris = QColor::fromRgb(valeurGris, valeurGris, valeurGris).rgb();
         listeNiveauxDeGris.append(niveauDeGris);
     }
@@ -220,7 +240,7 @@ const QList<QRgb> Image::getListeTeintesSaturees(const int& nombreTeintesSaturee
     const double pasTeintesSaturees = this->getPasTeintesSaturees(nombreTeintesSaturees);
     for (int itTeinteSaturee = 0; itTeinteSaturee < nombreTeintesSaturees; itTeinteSaturee++)
     {
-        const int valeurTeinte = (int) round((double) itTeinteSaturee * pasTeintesSaturees);
+        const int valeurTeinte = static_cast<int>(round(itTeinteSaturee * pasTeintesSaturees));
         const QRgb teinteSaturee = QColor::fromHsv(valeurTeinte, 255, 255).rgb();
         listeTeintesSaturees.append(teinteSaturee);
     }

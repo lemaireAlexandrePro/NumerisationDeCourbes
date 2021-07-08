@@ -1,7 +1,7 @@
 //==============================================================================
 // Name        : ParametresExport.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the ParametresExport class
 //==============================================================================
 
@@ -16,20 +16,20 @@ const char ParametresExport::caractereSeparateurDecimalDefaut = '.';
 const double ParametresExport::seuilInterpolationNumeriqueDefaut = 0.0;
 
 const QMap<int, char> ParametresExport::formatsNotationNombresCaractere = QMap<int, char>(
-        std::map<int, char> { {STANDARD, 'f'}, {SCIENTIFIQUE, 'e'}});
+        std::map<int, char> { { STANDARD, 'f' }, { SCIENTIFIQUE, 'e' } });
 const QMap<int, QString> ParametresExport::formatsNotationNombresTexte = QMap<int, QString>(
-        std::map<int, QString> { {STANDARD, QString::fromUtf8("Standard")}, {SCIENTIFIQUE,
-                QString::fromUtf8("Scientifique")}});
+        std::map<int, QString> { { STANDARD, QString::fromUtf8("Standard") }, { SCIENTIFIQUE,
+                QString::fromUtf8("Scientifique") } });
 const QMap<char, int> ParametresExport::caracteresSeparationIndice = QMap<char, int>(
-        std::map<char, int> { {' ', ESPACE}, {'\t', TABULATION}, {';', POINT_VIRGULE}});
+        std::map<char, int> { { ' ', ESPACE }, { '\t', TABULATION }, { ';', POINT_VIRGULE } });
 const QMap<char, QString> ParametresExport::caracteresSeparationTexte = QMap<char, QString>(
-        std::map<char, QString> { {' ', QString::fromUtf8("Espace")}, {'\t', QString::fromUtf8(
-                "Tabulation")}, {';', QString::fromUtf8("Point-virgule")}});
+        std::map<char, QString> { { ' ', QString::fromUtf8("Espace") }, { '\t', QString::fromUtf8(
+                "Tabulation") }, { ';', QString::fromUtf8("Point-virgule") } });
 const QMap<char, int> ParametresExport::caracteresSeparateurDecimalIndice = QMap<char, int>(
-        std::map<char, int> { {'.', POINT}, {',', VIRGULE}});
+        std::map<char, int> { { '.', POINT }, { ',', VIRGULE } });
 const QMap<char, QString> ParametresExport::caracteresSeparateurDecimalTexte = QMap<char, QString>(
-        std::map<char, QString> { {'.', QString::fromUtf8("Point")}, {',', QString::fromUtf8(
-                "Virgule")}});
+        std::map<char, QString> { { '.', QString::fromUtf8("Point") }, { ',', QString::fromUtf8(
+                "Virgule") } });
 
 ParametresExport::ParametresExport() :
         formatNotationNombres(formatNotationNombresDefaut),
@@ -58,6 +58,22 @@ ParametresExport::ParametresExport(const ParametresExport& parametresExport) :
 
 ParametresExport::~ParametresExport()
 {
+}
+
+ParametresExport& ParametresExport::operator=(const ParametresExport& parametresExport)
+{
+    this->copy(parametresExport);
+    return *this;
+}
+
+bool ParametresExport::operator==(const ParametresExport& parametresExport) const
+{
+    return this->equals(parametresExport);
+}
+
+bool ParametresExport::operator!=(const ParametresExport& parametresExport) const
+{
+    return !this->equals(parametresExport);
 }
 
 const int& ParametresExport::getFormatNotationNombres() const
@@ -152,17 +168,17 @@ bool ParametresExport::equals(const ParametresExport& parametresExport) const
     return true;
 }
 
-void ParametresExport::fromString(const QString& fromString, const char& sep)
+void ParametresExport::fromString(const QString& fromString, const QChar& sep)
 {
     const QStringList fromStringList = listeSousElements(fromString, sep);
     this->setFormatNotationNombres(fromStringList.at(0).toInt());
     this->setNombreChiffresSignificatifs(fromStringList.at(1).toInt());
-    this->setCaractereSeparation(fromStringList.at(2).at(1).toAscii());
-    this->setCaractereSeparateurDecimal(fromStringList.at(3).at(1).toAscii());
+    this->setCaractereSeparation(fromStringList.at(2).at(1).toLatin1());
+    this->setCaractereSeparateurDecimal(fromStringList.at(3).at(1).toLatin1());
     this->setSeuilInterpolationNumerique(fromStringList.at(4).toDouble());
 }
 
-const QString ParametresExport::toString(const char& sep) const
+const QString ParametresExport::toString(const QChar& sep) const
 {
     QString toString;
     toString += QString::number(this->getFormatNotationNombres()) + sep;

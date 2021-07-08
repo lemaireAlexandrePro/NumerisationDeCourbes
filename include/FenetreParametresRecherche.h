@@ -1,12 +1,12 @@
 //==============================================================================
 // Name        : FenetreParametresRecherche.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the FenetreParametresRecherche class
 //==============================================================================
 
-#ifndef FENETREPARAMETRESRECHERCHE_H_
-#define FENETREPARAMETRESRECHERCHE_H_
+#ifndef FENETREPARAMETRESRECHERCHE_H
+#define FENETREPARAMETRESRECHERCHE_H
 
 #include "ParametresRecherche.h"
 #include <QDialog>
@@ -23,7 +23,7 @@ class FenetreParametresRecherche : public QDialog
 
 public:
     // Constructeurs et destructeurs
-    explicit FenetreParametresRecherche(QWidget* parent = 0);
+    explicit FenetreParametresRecherche(QWidget* parent = nullptr);
     ~FenetreParametresRecherche();
 
     // Getters
@@ -57,4 +57,4 @@ private:
     ParametresRecherche parametresRecherche;
 };
 
-#endif /* FENETREPARAMETRESRECHERCHE_H_ */
+#endif /* FENETREPARAMETRESRECHERCHE_H */

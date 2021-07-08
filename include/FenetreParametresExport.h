@@ -1,12 +1,12 @@
 //==============================================================================
 // Name        : FenetreParametresExport.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the FenetreParametresExport class
 //==============================================================================
 
-#ifndef FENETREPARAMETRESEXPORT_H_
-#define FENETREPARAMETRESEXPORT_H_
+#ifndef FENETREPARAMETRESEXPORT_H
+#define FENETREPARAMETRESEXPORT_H
 
 #include "ParametresExport.h"
 #include <QDialog>
@@ -23,7 +23,7 @@ class FenetreParametresExport : public QDialog
 
 public:
     // Constructeurs et destructeurs
-    explicit FenetreParametresExport(QWidget* parent = 0);
+    explicit FenetreParametresExport(QWidget* parent = nullptr);
     ~FenetreParametresExport();
 
     // Getters
@@ -55,4 +55,4 @@ private:
     ParametresExport parametresExport;
 };
 
-#endif /* FENETREPARAMETRESEXPORT_H_ */
+#endif /* FENETREPARAMETRESEXPORT_H */

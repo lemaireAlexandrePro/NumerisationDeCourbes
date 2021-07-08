@@ -1,12 +1,12 @@
 //==============================================================================
 // Name        : VueGraphiqueEtude.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the VueGraphiqueEtude class
 //==============================================================================
 
-#ifndef VUEGRAPHIQUEETUDE_H_
-#define VUEGRAPHIQUEETUDE_H_
+#ifndef VUEGRAPHIQUEETUDE_H
+#define VUEGRAPHIQUEETUDE_H
 
 #include "Etude.h"
 #include "Image.h"
@@ -17,6 +17,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QKeyEvent>
+#include <QList>
 #include <QMouseEvent>
 #include <QPointF>
 #include <QWheelEvent>
@@ -52,6 +53,8 @@ public:
     void dessinerPoint(const Point& point, const ParametresPoint& parametresPoint);
     void dessinerTrait(const Point& point1, const Point& point2,
             const ParametresTrait& parametresTrait);
+    void dessinerTraitContinu(const QList<Point>& listeDePoints,
+            const ParametresTrait& parametresTrait);
 
 protected:
     // Méthodes spécifiques
@@ -73,4 +76,4 @@ signals:
     void mouseMoveEventSignal(const QPointF pointVueGraphique);
 };
 
-#endif /* VUEGRAPHIQUEETUDE_H_ */
+#endif /* VUEGRAPHIQUEETUDE_H */

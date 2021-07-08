@@ -18,4 +18,6 @@ Les fonctionnalités supplémentaires de l'application sont les suivantes :
  - Interpolation numérique,
  - Représentation en notation scientifique.
 
-L'application est réalisée en C++11 et Qt 4.8.6.
+L'application est réalisée en C++11 et [Qt 4.8.7](https://download.qt.io/archive/qt/4.8/4.8.7/). L'application nécessite la bibliothèque [Qwt 6.1.4](https://qwt.sourceforge.io/) pour certaines de ses fonctionnalités optionnelles.
+
+![](doc/NumerisationDeCourbes.png "NumerisationDeCourbes")

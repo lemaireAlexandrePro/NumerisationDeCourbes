@@ -1,13 +1,14 @@
 //==============================================================================
 // Name        : ParametresTrait.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the ParametresTrait class
 //==============================================================================
 
-#ifndef PARAMETRESTRAIT_H_
-#define PARAMETRESTRAIT_H_
+#ifndef PARAMETRESTRAIT_H
+#define PARAMETRESTRAIT_H
 
+#include <QChar>
 #include <QMap>
 #include <QRgb>
 #include <QString>
@@ -20,6 +21,11 @@ public:
     ParametresTrait(const int& styleTrait, const int& epaisseurTrait, const QRgb& couleurTrait);
     ParametresTrait(const ParametresTrait& parametresTrait);
     virtual ~ParametresTrait();
+
+    // Opérateurs
+    ParametresTrait& operator=(const ParametresTrait& parametresTrait);
+    bool operator==(const ParametresTrait& parametresTrait) const;
+    bool operator!=(const ParametresTrait& parametresTrait) const;
 
     // Getters
     const int& getStyleTrait() const;
@@ -36,8 +42,8 @@ public:
     void set(const int& styleTrait, const int& epaisseurTrait, const QRgb& couleurTrait);
     void copy(const ParametresTrait& parametresTrait);
     bool equals(const ParametresTrait& parametresTrait) const;
-    void fromString(const QString& fromString, const char& sep);
-    const QString toString(const char& sep) const;
+    void fromString(const QString& fromString, const QChar& sep);
+    const QString toString(const QChar& sep) const;
 
     // Méthodes spécifiques
     const QString getStyleTraitTexte() const;
@@ -66,4 +72,4 @@ private:
     static const QMap<int, QString> stylesTraitsTexte;
 };
 
-#endif /* PARAMETRESTRAIT_H_ */
+#endif /* PARAMETRESTRAIT_H */

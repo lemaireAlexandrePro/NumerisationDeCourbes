@@ -1,12 +1,12 @@
 //==============================================================================
 // Name        : FenetreDocumentation.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the FenetreDocumentation class
 //==============================================================================
 
-#ifndef FENETREDOCUMENTATION_H_
-#define FENETREDOCUMENTATION_H_
+#ifndef FENETREDOCUMENTATION_H
+#define FENETREDOCUMENTATION_H
 
 #include <QDialog>
 #include <QWidget>
@@ -22,7 +22,7 @@ class FenetreDocumentation : public QDialog
 
 public:
     // Constructeurs et destructeurs
-    explicit FenetreDocumentation(QWidget* parent = 0);
+    explicit FenetreDocumentation(QWidget* parent = nullptr);
     ~FenetreDocumentation();
 
     // Getters
@@ -38,4 +38,4 @@ private:
     Ui::FenetreDocumentation* ui;
 };
 
-#endif /* FENETREDOCUMENTATION_H_ */
+#endif /* FENETREDOCUMENTATION_H */

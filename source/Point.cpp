@@ -1,7 +1,7 @@
 //==============================================================================
 // Name        : Point.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the Point class
 //==============================================================================
 
@@ -9,10 +9,12 @@
 #include "Outils.h"
 #include <QStringList>
 
-const QMap<int, QString> Point::typesPointsTexte = QMap<int, QString>(std::map<int, QString> { {
-        INDEFINI, QString::fromUtf8("Indéfini")}, {REPERE, QString::fromUtf8("Repère")}, {MANUEL,
-        QString::fromUtf8("Manuel")}, {COURBE, QString::fromUtf8("Courbe")}, {COURBE_DEBUT,
-        QString::fromUtf8("Début de courbe")}, {COURBE_FIN, QString::fromUtf8("Fin de courbe")}});
+const QMap<int, QString> Point::typesPointsTexte = QMap<int, QString>(
+        std::map<int, QString> { { INDEFINI, QString::fromUtf8("Indéfini") }, { REPERE,
+                QString::fromUtf8("Repère") }, { MANUEL, QString::fromUtf8("Manuel") }, { COURBE,
+                QString::fromUtf8("Courbe") },
+                { COURBE_DEBUT, QString::fromUtf8("Début de courbe") }, { COURBE_FIN,
+                        QString::fromUtf8("Fin de courbe") } });
 
 Point::Point() :
         typePoint(INDEFINI)
@@ -41,6 +43,22 @@ Point::Point(const Point& point) :
 
 Point::~Point()
 {
+}
+
+Point& Point::operator=(const Point& point)
+{
+    this->copy(point);
+    return *this;
+}
+
+bool Point::operator==(const Point& point) const
+{
+    return this->equals(point);
+}
+
+bool Point::operator!=(const Point& point) const
+{
+    return !this->equals(point);
 }
 
 const QPoint& Point::getPointPixel() const
@@ -151,7 +169,7 @@ bool Point::equals(const Point& point) const
     return true;
 }
 
-void Point::fromString(const QString& fromString, const char& sep)
+void Point::fromString(const QString& fromString, const QChar& sep)
 {
     const QStringList fromStringList = listeSousElements(fromString, sep);
     this->setPointPixelX(fromStringList.at(0).toInt());
@@ -161,7 +179,7 @@ void Point::fromString(const QString& fromString, const char& sep)
     this->setTypePoint(fromStringList.at(4).toInt());
 }
 
-const QString Point::toString(const char& sep) const
+const QString Point::toString(const QChar& sep) const
 {
     QString toString;
     toString += QString::number(this->getPointPixelX()) + sep;
@@ -180,9 +198,4 @@ const QString Point::getTypePointTexte() const
 void Point::setTypePointTexte(const QString& typePointTexte)
 {
     this->setTypePoint(typesPointsTexte.key(typePointTexte));
-}
-
-bool Point::operator==(const Point& point) const
-{
-    return this->equals(point);
 }

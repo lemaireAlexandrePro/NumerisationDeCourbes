@@ -1,15 +1,16 @@
 //==============================================================================
 // Name        : ParametresAffichage.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the ParametresAffichage class
 //==============================================================================
 
-#ifndef PARAMETRESAFFICHAGE_H_
-#define PARAMETRESAFFICHAGE_H_
+#ifndef PARAMETRESAFFICHAGE_H
+#define PARAMETRESAFFICHAGE_H
 
 #include "ParametresPoint.h"
 #include "ParametresTrait.h"
+#include <QChar>
 #include <QMap>
 #include <QString>
 
@@ -25,6 +26,11 @@ public:
             const ParametresPoint& parametresPointsManuels);
     ParametresAffichage(const ParametresAffichage& parametresAffichage);
     virtual ~ParametresAffichage();
+
+    // Opérateurs
+    ParametresAffichage& operator=(const ParametresAffichage& parametresAffichage);
+    bool operator==(const ParametresAffichage& parametresAffichage) const;
+    bool operator!=(const ParametresAffichage& parametresAffichage) const;
 
     // Getters
     const int& getFormatNotationNombres() const;
@@ -53,8 +59,8 @@ public:
             const ParametresPoint& parametresPointsManuels);
     void copy(const ParametresAffichage& parametresAffichage);
     bool equals(const ParametresAffichage& parametresAffichage) const;
-    void fromString(const QString& fromString, const char& sep);
-    const QString toString(const char& sep) const;
+    void fromString(const QString& fromString, const QChar& sep);
+    const QString toString(const QChar& sep) const;
 
     // Méthodes spécifiques
     char getFormatNotationNombresCaractere() const;
@@ -92,4 +98,4 @@ private:
     static const QMap<int, QString> formatsNotationNombresTexte;
 };
 
-#endif /* PARAMETRESAFFICHAGE_H_ */
+#endif /* PARAMETRESAFFICHAGE_H */

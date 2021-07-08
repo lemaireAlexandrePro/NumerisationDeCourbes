@@ -1,12 +1,12 @@
 //==============================================================================
 // Name        : FenetreParametresConversion.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the FenetreParametresConversion class
 //==============================================================================
 
-#ifndef FENETREPARAMETRESCONVERSION_H_
-#define FENETREPARAMETRESCONVERSION_H_
+#ifndef FENETREPARAMETRESCONVERSION_H
+#define FENETREPARAMETRESCONVERSION_H
 
 #include "ParametresConversion.h"
 #include <QDialog>
@@ -23,7 +23,7 @@ class FenetreParametresConversion : public QDialog
 
 public:
     // Constructeurs et destructeurs
-    explicit FenetreParametresConversion(QWidget* parent = 0);
+    explicit FenetreParametresConversion(QWidget* parent = nullptr);
     ~FenetreParametresConversion();
 
     // Getters
@@ -56,4 +56,4 @@ private:
     ParametresConversion parametresConversion;
 };
 
-#endif /* FENETREPARAMETRESCONVERSION_H_ */
+#endif /* FENETREPARAMETRESCONVERSION_H */

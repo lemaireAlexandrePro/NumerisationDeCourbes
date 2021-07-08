@@ -1,13 +1,14 @@
 //==============================================================================
 // Name        : ParametresExport.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the ParametresExport class
 //==============================================================================
 
-#ifndef PARAMETRESEXPORT_H_
-#define PARAMETRESEXPORT_H_
+#ifndef PARAMETRESEXPORT_H
+#define PARAMETRESEXPORT_H
 
+#include <QChar>
 #include <QMap>
 #include <QString>
 
@@ -21,6 +22,11 @@ public:
             const double& seuilInterpolationNumerique);
     ParametresExport(const ParametresExport& parametresExport);
     virtual ~ParametresExport();
+
+    // Opérateurs
+    ParametresExport& operator=(const ParametresExport& parametresExport);
+    bool operator==(const ParametresExport& parametresExport) const;
+    bool operator!=(const ParametresExport& parametresExport) const;
 
     // Getters
     const int& getFormatNotationNombres() const;
@@ -43,8 +49,8 @@ public:
             const double& seuilInterpolationNumerique);
     void copy(const ParametresExport& parametresExport);
     bool equals(const ParametresExport& parametresExport) const;
-    void fromString(const QString& fromString, const char& sep);
-    const QString toString(const char& sep) const;
+    void fromString(const QString& fromString, const QChar& sep);
+    const QString toString(const QChar& sep) const;
 
     // Méthodes spécifiques
     char getFormatNotationNombresCaractere() const;
@@ -102,4 +108,4 @@ private:
     static const QMap<char, QString> caracteresSeparateurDecimalTexte;
 };
 
-#endif /* PARAMETRESEXPORT_H_ */
+#endif /* PARAMETRESEXPORT_H */

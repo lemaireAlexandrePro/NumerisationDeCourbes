@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FenetreGraphique</class>
+ <widget class="QDialog" name="FenetreGraphique">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>824</width>
+    <height>161</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Graphique</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayoutFenetreGraphique">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBoxParametresGraphique">
+     <property name="title">
+      <string>Paramètres du graphique</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayoutParametresGraphique">
+      <item row="0" column="1">
+       <widget class="QLabel" name="labelBorneInferieure">
+        <property name="text">
+         <string>Borne inférieure</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="labelBorneSuperieure">
+        <property name="text">
+         <string>Borne supérieure</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="labelPasPrincipal">
+        <property name="text">
+         <string>Pas principal</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="labelPasSecondaire">
+        <property name="text">
+         <string>Pas secondaire</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QLabel" name="labelGrillePrincipale">
+        <property name="text">
+         <string>Grille principale</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="6">
+       <widget class="QLabel" name="labelGrilleSecondaire">
+        <property name="text">
+         <string>Grille secondaire</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelAxeHorizontal">
+        <property name="text">
+         <string>Axe horizontal</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEditAxeHorizontalBorneInferieure"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLineEdit" name="lineEditAxeHorizontalBorneSuperieure"/>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLineEdit" name="lineEditAxeHorizontalPasPrincipal"/>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLineEdit" name="lineEditAxeHorizontalPasSecondaire">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="QCheckBox" name="checkBoxAxeHorizontalGrillePrincipale">
+        <property name="layoutDirection">
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="6">
+       <widget class="QCheckBox" name="checkBoxAxeHorizontalGrilleSecondaire">
+        <property name="layoutDirection">
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="labelAxeVertical">
+        <property name="text">
+         <string>Axe vertical</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lineEditAxeVerticalBorneInferieure"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="lineEditAxeVerticalBorneSuperieure"/>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLineEdit" name="lineEditAxeVerticalPasPrincipal"/>
+      </item>
+      <item row="2" column="4">
+       <widget class="QLineEdit" name="lineEditAxeVerticalPasSecondaire">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="5">
+       <widget class="QCheckBox" name="checkBoxAxeVerticalGrillePrincipale">
+        <property name="layoutDirection">
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="6">
+       <widget class="QCheckBox" name="checkBoxAxeVerticalGrilleSecondaire">
+        <property name="layoutDirection">
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QWidget" name="widgetGraphique" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Ok|QDialogButtonBox::Save</set>
+     </property>
+     <property name="centerButtons">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>FenetreGraphique</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>FenetreGraphique</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

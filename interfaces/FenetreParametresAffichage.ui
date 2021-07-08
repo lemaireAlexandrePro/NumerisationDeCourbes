@@ -103,7 +103,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="labelEpaisseurAxes">
         <property name="text">
-         <string>Epaisseur des axes</string>
+         <string>Épaisseur des axes</string>
         </property>
        </widget>
       </item>
@@ -157,7 +157,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="labelEpaisseurPointsAxes">
         <property name="text">
-         <string>Epaisseur des points des axes</string>
+         <string>Épaisseur des points des axes</string>
         </property>
        </widget>
       </item>
@@ -216,7 +216,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="labelEpaisseurCourbes">
         <property name="text">
-         <string>Epaisseur des courbes</string>
+         <string>Épaisseur des courbes</string>
         </property>
        </widget>
       </item>
@@ -270,7 +270,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="labelEpaisseurPointsCourbes">
         <property name="text">
-         <string>Epaisseur des points des courbes</string>
+         <string>Épaisseur des points des courbes</string>
         </property>
        </widget>
       </item>
@@ -324,7 +324,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="labelEpaisseurPointsManuels">
         <property name="text">
-         <string>Epaisseur des points manuels</string>
+         <string>Épaisseur des points manuels</string>
         </property>
        </widget>
       </item>

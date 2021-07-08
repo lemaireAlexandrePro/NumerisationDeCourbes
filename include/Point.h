@@ -1,13 +1,14 @@
 //==============================================================================
 // Name        : Point.h
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Header file of the Point class
 //==============================================================================
 
-#ifndef POINT_H_
-#define POINT_H_
+#ifndef POINT_H
+#define POINT_H
 
+#include <QChar>
 #include <QList>
 #include <QMap>
 #include <QPoint>
@@ -24,6 +25,11 @@ public:
             const double& pointReelY, const int& typePoint);
     Point(const Point& point);
     virtual ~Point();
+
+    // Opérateurs
+    Point& operator=(const Point& point);
+    bool operator==(const Point& point) const;
+    bool operator!=(const Point& point) const;
 
     // Getters
     const QPoint& getPointPixel() const;
@@ -50,13 +56,12 @@ public:
             const double& pointReelY, const int& typePoint);
     void copy(const Point& point);
     bool equals(const Point& point) const;
-    void fromString(const QString& fromString, const char& sep);
-    const QString toString(const char& sep) const;
+    void fromString(const QString& fromString, const QChar& sep);
+    const QString toString(const QChar& sep) const;
 
     // Méthodes spécifiques
     const QString getTypePointTexte() const;
     void setTypePointTexte(const QString& typePointTexte);
-    bool operator==(const Point& point) const;
 
     // Enumération des types de points
     enum typesPoints
@@ -76,4 +81,4 @@ private:
 
 typedef QList<Point> Courbe;
 
-#endif /* POINT_H_ */
+#endif /* POINT_H */

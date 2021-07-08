@@ -760,6 +760,8 @@
     <addaction name="actionParametresConversion"/>
     <addaction name="actionParametresRecherche"/>
     <addaction name="actionParametresExport"/>
+    <addaction name="actionChargerParametres"/>
+    <addaction name="actionSauverParametres"/>
    </widget>
    <widget class="QMenu" name="menuInformations">
     <property name="title">
@@ -875,6 +877,30 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F4</string>
+   </property>
+  </action>
+  <action name="actionChargerParametres">
+   <property name="icon">
+    <iconset resource="../ressources/Ressources.qrc">
+     <normaloff>:/icones/iconeActionChargerParametres</normaloff>:/icones/iconeActionChargerParametres</iconset>
+   </property>
+   <property name="text">
+    <string>Charger des paramètres existants...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+O</string>
+   </property>
+  </action>
+  <action name="actionSauverParametres">
+   <property name="icon">
+    <iconset resource="../ressources/Ressources.qrc">
+     <normaloff>:/icones/iconeActionSauverParametres</normaloff>:/icones/iconeActionSauverParametres</iconset>
+   </property>
+   <property name="text">
+    <string>Sauver les paramètres courants...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="actionDocumentation">

@@ -1,7 +1,7 @@
 //==============================================================================
 // Name        : ParametresTrait.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the ParametresTrait class
 //==============================================================================
 
@@ -12,16 +12,16 @@
 
 const int ParametresTrait::styleTraitDefaut = LIGNE;
 const int ParametresTrait::epaisseurTraitDefaut = 2;
-const QRgb ParametresTrait::couleurTraitDefaut = 4278190080; // QColor(Qt::black).rgb()
-const QRgb ParametresTrait::couleurTraitAxeDefaut = 4294901760; // QColor(Qt::red).rgb()
-const QRgb ParametresTrait::couleurTraitCourbeDefaut = 4278190335; // QColor(Qt::blue).rgb()
-// Note : Initialisations des valeurs par défaut des paramètres d'un trait avec les valeurs entières
-//        non signées correspondantes afin d'en disposer pour les initialisations des valeurs par
+const QRgb ParametresTrait::couleurTraitDefaut = 0xFF000000; // QColor(Qt::black).rgb()
+const QRgb ParametresTrait::couleurTraitAxeDefaut = 0xFFFF0000; // QColor(Qt::red).rgb()
+const QRgb ParametresTrait::couleurTraitCourbeDefaut = 0xFF0000FF; // QColor(Qt::blue).rgb()
+// Note : Initialisations des valeurs par défaut des paramètres d'un trait avec les valeurs
+//        hexadécimales correspondantes afin d'en disposer pour les initialisations des valeurs par
 //        défaut des paramètres d'affichage.
 
 const QMap<int, QString> ParametresTrait::stylesTraitsTexte = QMap<int, QString>(
-        std::map<int, QString> { {LIGNE, QString::fromUtf8("Ligne")}, {TIRETS, QString::fromUtf8(
-                "Tirets")}, {POINTILLES, QString::fromUtf8("Pointillés")}});
+        std::map<int, QString> { { LIGNE, QString::fromUtf8("Ligne") }, { TIRETS, QString::fromUtf8(
+                "Tirets") }, { POINTILLES, QString::fromUtf8("Pointillés") } });
 
 ParametresTrait::ParametresTrait() :
         styleTrait(styleTraitDefaut), epaisseurTrait(epaisseurTraitDefaut),
@@ -45,6 +45,22 @@ ParametresTrait::ParametresTrait(const ParametresTrait& parametresTrait) :
 
 ParametresTrait::~ParametresTrait()
 {
+}
+
+ParametresTrait& ParametresTrait::operator=(const ParametresTrait& parametresTrait)
+{
+    this->copy(parametresTrait);
+    return *this;
+}
+
+bool ParametresTrait::operator==(const ParametresTrait& parametresTrait) const
+{
+    return this->equals(parametresTrait);
+}
+
+bool ParametresTrait::operator!=(const ParametresTrait& parametresTrait) const
+{
+    return !this->equals(parametresTrait);
 }
 
 const int& ParametresTrait::getStyleTrait() const
@@ -107,7 +123,7 @@ bool ParametresTrait::equals(const ParametresTrait& parametresTrait) const
     return true;
 }
 
-void ParametresTrait::fromString(const QString& fromString, const char& sep)
+void ParametresTrait::fromString(const QString& fromString, const QChar& sep)
 {
     const QStringList fromStringList = listeSousElements(fromString, sep);
     this->setStyleTrait(fromStringList.at(0).toInt());
@@ -115,7 +131,7 @@ void ParametresTrait::fromString(const QString& fromString, const char& sep)
     this->setCouleurTrait(QColor(fromStringList.at(2)).rgb());
 }
 
-const QString ParametresTrait::toString(const char& sep) const
+const QString ParametresTrait::toString(const QChar& sep) const
 {
     QString toString;
     toString += QString::number(this->getStyleTrait()) + sep;

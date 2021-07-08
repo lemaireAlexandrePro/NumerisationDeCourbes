@@ -1,7 +1,7 @@
 //==============================================================================
 // Name        : ParametresPoint.cpp
 // Author      : Alexis Foerster (alexis.foerster@gmail.com)
-// Version     : 1.0.0 (20/01/2017)
+// Version     : 1.2.0 (03/10/2020)
 // Description : Source file of the ParametresPoint class
 //==============================================================================
 
@@ -12,17 +12,17 @@
 
 const int ParametresPoint::stylePointDefaut = CARRE;
 const int ParametresPoint::epaisseurPointDefaut = 4;
-const QRgb ParametresPoint::couleurPointDefaut = 4278190080; // QColor(Qt::black).rgb()
-const QRgb ParametresPoint::couleurPointAxeDefaut = 4294901760; // QColor(Qt::red).rgb()
-const QRgb ParametresPoint::couleurPointCourbeDefaut = 4278190335; // QColor(Qt::blue).rgb()
-const QRgb ParametresPoint::couleurPointManuelDefaut = 4278255360; // QColor(Qt::green).rgb()
-// Note : Initialisations des valeurs par défaut des paramètres d'un point avec les valeurs entières
-//        non signées correspondantes afin d'en disposer pour les initialisations des valeurs par
+const QRgb ParametresPoint::couleurPointDefaut = 0xFF000000; // QColor(Qt::black).rgb()
+const QRgb ParametresPoint::couleurPointAxeDefaut = 0xFFFF0000; // QColor(Qt::red).rgb()
+const QRgb ParametresPoint::couleurPointCourbeDefaut = 0xFF0000FF; // QColor(Qt::blue).rgb()
+const QRgb ParametresPoint::couleurPointManuelDefaut = 0xFF00FF00; // QColor(Qt::green).rgb()
+// Note : Initialisations des valeurs par défaut des paramètres d'un point avec les valeurs
+//        hexadécimales correspondantes afin d'en disposer pour les initialisations des valeurs par
 //        défaut des paramètres d'affichage.
 
 const QMap<int, QString> ParametresPoint::stylesPointsTexte = QMap<int, QString>(
-        std::map<int, QString> { {CARRE, QString::fromUtf8("Carré")}, {CERCLE, QString::fromUtf8(
-                "Cercle")}});
+        std::map<int, QString> { { CARRE, QString::fromUtf8("Carré") }, { CERCLE, QString::fromUtf8(
+                "Cercle") } });
 
 ParametresPoint::ParametresPoint() :
         stylePoint(stylePointDefaut), epaisseurPoint(epaisseurPointDefaut),
@@ -46,6 +46,22 @@ ParametresPoint::ParametresPoint(const ParametresPoint& parametresPoint) :
 
 ParametresPoint::~ParametresPoint()
 {
+}
+
+ParametresPoint& ParametresPoint::operator=(const ParametresPoint& parametresPoint)
+{
+    this->copy(parametresPoint);
+    return *this;
+}
+
+bool ParametresPoint::operator==(const ParametresPoint& parametresPoint) const
+{
+    return this->equals(parametresPoint);
+}
+
+bool ParametresPoint::operator!=(const ParametresPoint& parametresPoint) const
+{
+    return !this->equals(parametresPoint);
 }
 
 const int& ParametresPoint::getStylePoint() const
@@ -108,7 +124,7 @@ bool ParametresPoint::equals(const ParametresPoint& parametresPoint) const
     return true;
 }
 
-void ParametresPoint::fromString(const QString& fromString, const char& sep)
+void ParametresPoint::fromString(const QString& fromString, const QChar& sep)
 {
     const QStringList fromStringList = listeSousElements(fromString, sep);
     this->setStylePoint(fromStringList.at(0).toInt());
@@ -116,7 +132,7 @@ void ParametresPoint::fromString(const QString& fromString, const char& sep)
     this->setCouleurPoint(QColor(fromStringList.at(2)).rgb());
 }
 
-const QString ParametresPoint::toString(const char& sep) const
+const QString ParametresPoint::toString(const QChar& sep) const
 {
     QString toString;
     toString += QString::number(this->getStylePoint()) + sep;
